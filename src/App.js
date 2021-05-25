@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import EventList from './EventList';
 import CitySearch from './CitySearch';
-import NumberOfEvents from './NumberofEvents';
+import NumberOfEvents from './NumberOfEvents';
 
 class App extends Component {
   render() {
