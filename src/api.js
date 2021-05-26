@@ -90,3 +90,5 @@ const getToken = async (code) => {
 
   return access_token;
 };
+
+export {getEvents, getAccessToken, extractLocations, getToken, checkToken};
