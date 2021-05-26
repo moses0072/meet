@@ -16,12 +16,6 @@ const removeQuery = () => {
   }
 };
 
-export const extractLocations = (events) => {
-  let extractLocations = events.map((event) => event.location);
-  let locations = [...new Set(extractLocations)];
-  return locations;
-};
-
 const checkToken = async (accessToken) => {
   const result = await fetch(
     `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
@@ -30,6 +24,12 @@ const checkToken = async (accessToken) => {
     .catch((error) => error.json());
 
   return result;
+};
+
+export const extractLocations = (events) => {
+  let extractLocations = events.map((event) => event.location);
+  let locations = [...new Set(extractLocations)];
+  return locations;
 };
 
 export const getEvents = async () => {
