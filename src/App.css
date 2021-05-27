@@ -40,13 +40,15 @@ input[type="number"] {
   width: 250px;
 }
 
-.CitySearch {
+.CitySearch,
+.NumberOfEvents {
   display: flex;
   flex-direction: column;
   flex-basis: 300px;
   max-width: 300px;
   margin: auto;
   position: relative;
+  font-weight: 700;
 }
 
 .suggestions {
@@ -63,7 +65,7 @@ input[type="number"] {
 .suggestions > li {
   text-align: left;
   padding: 8px 6px 8px 10px;
-  background-color: #eee;
+  background-color: rgb(222, 236, 199);
   cursor: default;
 }
 
@@ -85,14 +87,25 @@ input[type="number"] {
   position: relative;
 }
 
+.NumberOfEvents {
+  width: 250px;
+}
 .details-btn {
   position: absolute;
   right: 5px;
   bottom: 5px;
   padding: 5px 8px;
   border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
   outline: none;
   cursor: pointer;
+  background-color: #9ccec6;
+  transition: 0.2s opacity;
+}
+
+.details-btn:hover,
+.details-btn:focus {
+  opacity: 0.8;
 }
 
 .name {
