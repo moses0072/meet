@@ -3,15 +3,14 @@ import './App.css';
 import EventList from './EventList';
 import CitySearch from './CitySearch';
 import NumberOfEvents from './NumberOfEvents';
-import { getEvents, extractLocations, checkToken } from './api';
-import Login from "./Login";
+import { getEvents, extractLocations } from './api';
+
 class App extends Component {
  
   state = {
-    tockenCheck: false,
-    events: [],
-    locations: [],
-    numberOfEvents: 32 
+   events: [],
+   locations: [],
+   numberOfEvents: 32 
  }
 
   updateEvents = (location, eventCount) => {
@@ -31,21 +30,16 @@ class App extends Component {
     });
   }
 
-  async componentDidMount() {
-    const accessToken =
-      localStorage.getItem("access_token");
-    const validToken = accessToken !== null ? await
-      checkToken(accessToken) : false;
-      this.setState({ tokenCheck: validToken });
-    if(validToken === true) this.updateEvents()
-    const searchParams = new
-    URLSearchParams(window.location.search);
-    const code = searchParams.get("code");
+  componentDidMount() {
     this.mounted = true;
-    if (code && this.mounted === true && validToken === false){
-      this.setState({tokenCheck:true });
-      this.updateEvents()
-    }
+    getEvents().then((events) => {
+      if (this.mounted) {
+        this.setState({ 
+          events: events.slice(0, this.state.numberOfEvents),
+          locations: extractLocations(events) 
+        });
+      }
+    });
   }
 
   componentWillUnmount(){
@@ -54,12 +48,8 @@ class App extends Component {
 
 
   render() {
-    return tokenCheck === false ? (
+    return (
       <div className='App'>
-        <Login />
-      </div> 
-    ) : (
-      <div className='App'> 
         <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} numberOfEvents={this.state.numberOfEvents} />
         <NumberOfEvents numberOfEvents={this.state.numberOfEvents} updateEvents={this.updateEvents} />
         <EventList events={this.state.events} />
