@@ -22,6 +22,8 @@ class App extends Component {
         locationEvents = events.filter((event) => event.location === location);
       } else if (location === '' && eventCount > 0) {
         locationEvents = events.slice(0, eventCount);
+      } else if (location === '' && eventCount === '') {
+        locationEvents = events;
       }
       this.setState({
        events: locationEvents,
