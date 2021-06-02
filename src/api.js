@@ -38,7 +38,7 @@ const getEvents = async () => {
   }
 
   if (!navigator.onLine) {
-    const events = await localStorage.getItem('lastEvents');
+    const events = localStorage.getItem('lastEvents');
     NProgress.done();
     return events? JSON.parse(events).events:[];
   }
@@ -76,7 +76,7 @@ const getAccessToken = async () => {
     return code && getToken(code);
   }
   return accessToken;
-}
+};
 
 const getToken = async (code) => {
   removeQuery();
