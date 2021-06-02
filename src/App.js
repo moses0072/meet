@@ -15,27 +15,29 @@ class App extends Component {
    events: [],
    locations: [],
    numberOfEvents: 32, 
+   tokenCheck: false,
+   showLogin: undefined
  }
 
- async componentDidMount() {
-  this.mounted = true;
-  const accessToken = localStorage.getItem('access_token');
-  const isTokenValid = (await checkToken(accessToken)).error ? false :
-    true;
-  const searchParams = new URLSearchParams(window.location.search);
-  const code = searchParams.get("code");
-  this.setState({ showWelcomeScreen: !(code || isTokenValid) });
-  if ((code || isTokenValid) && this.mounted) {
-    getEvents().then((events) => {
-      if (this.mounted) {
-        this.setState({
-          events: events.slice(0, this.state.numberOfEvents),
-          locations: extractLocations(events),
-        });
-      }
-    });  
+  async componentDidMount() {
+    this.mounted = true;
+    const accessToken = localStorage.getItem('access_token');
+    const isTokenValid = (await checkToken(accessToken)).error ? false :
+      true;
+    const searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get("code");
+    this.setState({ showLogin: !(code || isTokenValid) });
+    if ((code || isTokenValid) && this.mounted) {
+      getEvents().then((events) => {
+        if (this.mounted) {
+          this.setState({
+            events: events.slice(0, this.state.numberOfEvents),
+            locations: extractLocations(events),
+          });
+        }
+      });  
+    }
   }
-}
 
 componentWillUnmount(){
   this.mounted = false;
@@ -64,7 +66,7 @@ componentWillUnmount(){
     const { locations, numberOfEvents, events, tokenCheck } = this.state;
     return tokenCheck === false ? (
       <div className="App">
-        <Login />
+        <Login  />
       </div>
     ) : (  
       <div className='App'>
