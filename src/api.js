@@ -20,7 +20,7 @@ const checkToken = async (accessToken) => {
   const result = await fetch(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`)
     .then((res) => res.json())
     .catch((error) => error.json());
-  return result.error ? false : true;
+  return result;
 };
 
 const extractLocations = (events) => {
@@ -40,7 +40,7 @@ const getEvents = async () => {
   if (!navigator.onLine) {
     const events = localStorage.getItem('lastEvents');
     NProgress.done();
-    return events? JSON.parse(events).events:[];
+    return events ? JSON.parse(events).events:[];
   }
 
   const token = await getAccessToken();
@@ -60,10 +60,10 @@ const getEvents = async () => {
 };
 
 const getAccessToken = async () => {
-  const accessToken = await localStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
   const tokenCheck = accessToken && (await checkToken(accessToken));
 
-  if (!accessToken || !tokenCheck) {
+  if (!accessToken || tokenCheck.error) {
     await localStorage.removeItem('access_token');
     const searchParams = new URLSearchParams(window.location.search);
     const code = await searchParams.get('code');

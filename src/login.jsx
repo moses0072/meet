@@ -26,6 +26,6 @@ function Login() {
       Privacy policy
       </a>
     </div>
-  );
+  )
 }
 export default Login;
