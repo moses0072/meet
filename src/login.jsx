@@ -14,12 +14,12 @@ function Login() {
              alt="Google sign-in"
             />
           </div>
-          <a href="THE URL RETURNED FROM YOUR getAuth ENDPOINT HERE" rel="nofollow noopener" class="btn-text">
+          <a href="https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar.readonly&response_type=code&client_id=958736454897-lngqcuu7i8v9q114uejke6fek1g4bd2f.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fmoses0072.github.io%2Fmeet%2F%22" rel="nofollow noopener" class="btn-text">
           <b>Sign in with google</b>
           </a>
         </div>
       </div>
-      <a href="https://glenzy.github.io/meet/privacy.html" rel="nofollow noopener" >
+      <a href="https://moses0072.github.io/meet/privacy.html" rel="nofollow noopener" >
       Privacy policy
       </a>
     </div>
