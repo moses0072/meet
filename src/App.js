@@ -4,7 +4,7 @@ import EventList from './EventList';
 import CitySearch from './CitySearch';
 import NumberOfEvents from './NumberOfEvents';
 import Login from './login';
-import { getEvents, extractLocations, checkToken, getAccessToken } from './api';
+import { getEvents, checkToken } from './api';
 import "./nprogress.css";
 
 
@@ -13,43 +13,56 @@ class App extends Component {
     events: [],
     locations: [],
     numberOfEvents: 32,
-    tokenCheck: false
+    tokenCheck: false,
+    currentLocation: 'all'
+    
   }
 
   updateEvents = (location, eventCount) => {
-    let locationEvents;
-    getEvents().then((events) => {
-      if (location === 'all' && eventCount === 0) {
-        locationEvents = events;
-      } else if (location !== 'all' && eventCount === 0) {
-        locationEvents = events.filter((event) => event.location === location);
-      } else if (location === '' && eventCount > 0) {
-        locationEvents = events.slice(0, eventCount);
-      } else if (location === '' && eventCount === '') {
-        locationEvents = events;
-      }
-      this.setState({
-        events: locationEvents,
-        numberOfEvents: eventCount,
+    console.log('update events token valid: ', this.state.tokenCheck)
+    const { currentLocation, numberOfEvents } = this.state;
+    if (location) {
+      getEvents().then((response) => {
+        const locationEvents =
+          location === "all"
+            ? response.events
+            : response.events.filter((event) => event.location === location);
+        const events = locationEvents.slice(0, numberOfEvents);
+        return this.setState({
+          events: events,
+          currentLocation: location,
+          locations: response.locations,
+        });
       });
-    });
+    } else {
+      getEvents().then((response) => {
+        const locationEvents =
+          currentLocation === "all"
+            ? response.events
+            : response.events.filter(
+                (event) => event.location === currentLocation
+              );
+        const events = locationEvents.slice(0, eventCount);
+        return this.setState({
+          events: events,
+          numberOfEvents: eventCount,
+          locations: response.locations,
+        });
+      });
+    }
   };
   async componentDidMount() {
-    this.mounted = true;
-    const accessToken = localStorage.getItem('access_token');
-    const isTokenValid = (await checkToken(accessToken)).error ? false : true;
+    const accessToken = localStorage.getItem("access_token");
+    const validToken = accessToken !== null  ? await checkToken(accessToken) : false;
+    this.setState({ tokenCheck: validToken });
+    if(validToken === true) this.updateEvents()
     const searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get("code");
-    this.setState({ showLogin: !(code || isTokenValid) });
-    if ((code || isTokenValid) && this.mounted) {
-      getEvents().then((events) => {
-        if (this.mounted) {
-          this.setState({
-            events: events.slice(0, this.state.numberOfEvents),
-            locations: extractLocations(events),
-          });
-        }
-      });
+
+    this.mounted = true;
+    if (code && this.mounted === true && validToken === false){ 
+      this.setState({tokenCheck:true });
+      this.updateEvents()
     }
   }
   componentWillUnmount() {
@@ -57,28 +70,29 @@ class App extends Component {
   }
 
   render() {
-    const {tokenCheck} = this.state;
-     return tokenCheck === false ? ( 
-    
-      <div className="App">
-        <Login  />
-      </div>
-     ):( 
-      <div className="App">
-        <CitySearch
-          locations={this.state.locations}
-          updateEvents={this.updateEvents}
-          numberOfEvents={this.state.numberOfEvents}
-        />
-        <NumberOfEvents
-          numberOfEvents={this.state.numberOfEvents}
-          updateEvents={this.updateEvents}
-        />
-        <EventList
-          events={this.state.events}
-        />
+    const { tokenCheck } = this.state;
+      return tokenCheck === false ? (
+        <div className="App"> 
+          <Login  />
+        </div>
+        ):(  
+          <div className="App">
+            <h1>Meet App</h1>
+            <h4>Choose your nearest city</h4>
+            <CitySearch
+              locations={this.state.locations}
+              updateEvents={this.updateEvents}
+              numberOfEvents={this.state.numberOfEvents}
+          />
+             <NumberOfEvents
+             numberOfEvents={this.state.numberOfEvents}
+             updateEvents={this.updateEvents}
+             />
+             <EventList
+             events={this.state.events}
+          />
         
-      </div>
+          </div>
     );
   }
 }
