@@ -6,6 +6,7 @@ import NumberOfEvents from './NumberOfEvents';
 import Login from './login';
 import { getEvents, checkToken } from './api';
 import "./nprogress.css";
+import { OfflineAlert } from './Alert';
 
 
 class App extends Component {
@@ -64,7 +65,18 @@ class App extends Component {
       this.setState({tokenCheck:true });
       this.updateEvents()
     }
+    if (!navigator.onLine) {
+      this.setState({
+        offlineAlert: 'Cached data is being displayed.'
+      })
+    }
+    else {
+      this.setState({
+        offlineAlert: ''
+      })
+    }
   }
+
   componentWillUnmount() {
     this.mounted = false;
   }
