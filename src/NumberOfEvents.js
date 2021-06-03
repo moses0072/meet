@@ -3,7 +3,7 @@ import { ErrorAlert } from './Alert';
 
 class NumberOfEvents extends Component {
   state = {
-    numberOfEvents: 32,
+    NumberOfEvents: 32,
     errorText: ''
   }
 
