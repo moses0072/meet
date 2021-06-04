@@ -9,7 +9,7 @@ import "./nprogress.css";
 import { OfflineAlert } from './Alert';
 
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
+import EventGenre from "./EventGenre";
 
 class App extends Component {
   state = {
@@ -107,24 +107,26 @@ class App extends Component {
               locations={this.state.locations}
               updateEvents={this.updateEvents}
               numberOfEvents={this.state.numberOfEvents}
-              />
-             <NumberOfEvents
-             numberOfEvents={this.state.numberOfEvents}
-             updateEvents={this.updateEvents}
-             />
-             <OfflineAlert text={this.state.offlineAlert} />
+            />
+            <NumberOfEvents
+              numberOfEvents={this.state.numberOfEvents}
+              updateEvents={this.updateEvents}
+            />
+            <OfflineAlert text={this.state.offlineAlert} />
             
-             <ResponsiveContainer height={400} >
+            <div className='data-vis-wrapper'>
+              <EventGenre locations={this.state.locations} events={this.state.events} />
+              <ResponsiveContainer height={400} >
                 <ScatterChart 
                   margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="city" name="city" type="category" />
                   <YAxis dataKey="number" name="number of events" type="number" allowDecimals={false} />
-                  <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                  
+                  <Tooltip cursor={{ strokeDasharray: '3 3' }} />                  
                   <Scatter data={this.getData()} fill="#8884d8" />
                 </ScatterChart> 
-             </ResponsiveContainer>
+              </ResponsiveContainer>
+            </div> 
              <EventList
              events={this.state.events}
              />        
