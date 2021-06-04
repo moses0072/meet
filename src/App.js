@@ -100,6 +100,7 @@ class App extends Component {
              numberOfEvents={this.state.numberOfEvents}
              updateEvents={this.updateEvents}
              />
+             <OfflineAlert text={this.state.offlinealert} />
              <EventList
              events={this.state.events}
           />
